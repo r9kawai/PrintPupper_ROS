@@ -1,0 +1,62 @@
+import FreeCAD as App
+import FreeCADGui as Gui
+import Mesh
+import os
+
+print("Macro start")
+doc = App.ActiveDocument
+
+# ===== GUI選択からPart取得 =====
+# sel = Gui.Selection.getSelection()
+# if not sel:
+#     raise Exception("Partフォルダを選択してください")
+# part_obj = sel[0]
+
+# Label名でPart取得
+PART_LABEL = "ViewModelExport"   # 対象PartのLabel名
+def find_object_by_label(doc, label):
+    for obj in doc.Objects:
+        if obj.Label == label:
+            return obj
+    return None
+part_obj = find_object_by_label(doc, PART_LABEL)
+if part_obj is None:
+    raise Exception(f"Part(Label) '{PART_LABEL}' が見つかりません")
+
+# ===== 保存先 =====
+if doc.FileName:
+    base_dir = os.path.dirname(doc.FileName)
+else:
+    raise Exception("ドキュメントを保存してください")
+
+export_dir = os.path.join(base_dir, "ViewModelExport_stl")
+os.makedirs(export_dir, exist_ok=True)
+
+# ===== 対象収集（Body + Mirror）=====
+def collect_targets(obj, result):
+    if obj.TypeId in ["PartDesign::Body", "Part::Mirroring"]:
+        result.append(obj)
+
+    if hasattr(obj, "Group"):
+        for child in obj.Group:
+            collect_targets(child, result)
+
+targets = []
+collect_targets(part_obj, targets)
+
+print(f"Found {len(targets)} targets")
+
+# ===== STLエクスポート =====
+for obj in targets:
+    shape = obj.Shape
+    if shape.isNull():
+        print(f"Skip: {obj.Label} (shape is null)")
+        continue
+
+    safe_name = obj.Label.replace("/", "_").replace("\\", "_")
+    file_path = os.path.join(export_dir, f"{safe_name}.stl")
+
+    Mesh.export([obj], file_path)
+    print(f"Exported: {file_path}")
+
+print("Macro done")
