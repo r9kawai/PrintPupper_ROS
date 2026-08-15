@@ -17,7 +17,7 @@ std::vector<std::vector<float>> loadFloatArray(const std::string& filename);
 class PpChampJointsHardware
 {
 public:
-	const bool DBG_ON = true;
+	const bool DBG_ON = false;
 	const float PI = std::acos(-1.0);
 	const float L45DEG_RAD = (PI / 4);
 	const float R45DEG_RAD = -(PI / 4);
