@@ -1,0 +1,8 @@
+# Default OFF: preserve validated stage-1 relay behavior.
+enable_balance: true
+kp_roll: 1.0
+kp_pitch: 1.0
+max_correction_deg: 30.0
+max_correction_rate_deg_s: 30.0
+imu_timeout_sec: 0.2
+control_rate_hz: 50.0

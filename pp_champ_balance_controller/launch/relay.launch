@@ -1,0 +1,12 @@
+<launch>
+  <arg name="enable_balance" default="false"/>
+  <node pkg="pp_champ_balance_controller"
+        type="pp_champ_balance_controller_node"
+        name="pp_champ_balance_controller" output="screen">
+    <rosparam command="load" file="$(find pp_champ_balance_controller)/config/balance.yaml"/>
+    <param name="enable_balance" value="$(arg enable_balance)"/>
+    <param name="input_topic" value="/body_pose_manual"/>
+    <param name="output_topic" value="/body_pose"/>
+    <param name="imu_topic" value="/imu/data"/>
+  </node>
+</launch>

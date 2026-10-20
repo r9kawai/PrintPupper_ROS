@@ -1,0 +1,29 @@
+<launch>
+    <arg name="joy" default="true"/>
+    <arg name="dev" default="/dev/input/js0"/>
+    <arg name="enable_balance" default="false"/>
+
+    <node if="$(arg joy)"
+          pkg="joy"
+          type="joy_node"
+          name="joy"
+          output="screen">
+        <param name="dev" value="$(arg dev)"/>
+        <param name="autorepeat_rate" value="5"/>
+    </node>
+
+    <node pkg="champ_teleop"
+          type="champ_teleop.py"
+          name="champ_teleop"
+          output="screen">
+
+        <remap from="body_pose"
+               to="/body_pose_manual"/>
+    </node>
+
+    <include file="$(find pp_champ_balance_controller)/launch/relay.launch">
+        <arg name="enable_balance" value="$(arg enable_balance)"/>
+    </include>
+
+</launch>
+
