@@ -17,7 +17,7 @@ std::vector<std::vector<float>> loadFloatArray(const std::string& filename);
 class PpChampJointsHardware
 {
 public:
-	const bool DBG_ON = false;
+	bool DBG_ON = false;
 	const float PI = std::acos(-1.0);
 	const float L45DEG_RAD = (PI / 4);
 	const float R45DEG_RAD = -(PI / 4);
@@ -76,8 +76,9 @@ public:
 	ComputeUnparallelLinkKnee culk_;
 
 // ------------------------------------
-	PpChampJointsHardware()
+	PpChampJointsHardware(int _dbg)
 	{
+		DBG_ON = _dbg;
 		piGpiosPwmInit();
 
 		// load ServoCalibration.conf to neutral offsets
@@ -314,7 +315,13 @@ int main(int argc, char** argv)
 {
 	// Entry point of ROS node
 	ros::init(argc, argv, "pp_champ_joints_hardware");
-	PpChampJointsHardware *pcjh = new PpChampJointsHardware();
+	ros::NodeHandle nh("~");
+	int _dbg = 0;
+	nh.param("dbg", _dbg, 0);
+	ROS_INFO_STREAM("pp_champ_joints_hardware dbg:=" << _dbg);
+
+	PpChampJointsHardware *pcjh = new PpChampJointsHardware(_dbg);
+
 	ros::spin();
 	delete pcjh;
 	return 0;
