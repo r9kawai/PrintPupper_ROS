@@ -1,0 +1,11 @@
+<launch>
+    <!-- RViz only: No CHAMP controller -->
+
+    <arg name="fixed_frame" default="base_link"/>
+
+    <node pkg="rviz"
+          type="rviz"
+          name="rviz"
+          output="screen"
+          args="-f $(arg fixed_frame)" />
+</launch>
