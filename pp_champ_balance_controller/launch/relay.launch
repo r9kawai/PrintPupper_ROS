@@ -8,5 +8,13 @@
     <param name="input_topic" value="/body_pose_manual"/>
     <param name="output_topic" value="/body_pose"/>
     <param name="imu_topic" value="/imu/data"/>
+
+    <param name="max_correction_deg" value="45"/>
+    <param name="max_correction_rate_deg_s" value="45"/>
+
+    <param name="kp_roll" value="0.9"/>
+    <param name="kp_pitch" value="0.9"/>
+    <param name="kd_roll" value="0.02"/>
+    <param name="kd_pitch" value="0.02"/>
   </node>
 </launch>
