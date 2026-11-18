@@ -92,21 +92,20 @@ CTRL-C to quit
     def joy_callback(self, data):
         twist = Twist()
         twist.linear.x = data.axes[1] * self.speed
-        twist.linear.y = data.buttons[4] * data.axes[0] * self.speed
+        twist.linear.y = data.axes[0] * self.speed
         twist.linear.z = 0.0
         twist.angular.x = 0.0
         twist.angular.y = 0.0
-        twist.angular.z = (not data.buttons[4]) * data.axes[0] * self.turn
+        twist.angular.z = data.axes[3] * self.turn
         self.velocity_publisher.publish(twist)
 
         body_pose_lite = PoseLite()
         body_pose_lite.x = 0
         body_pose_lite.y = 0
-        body_pose_lite.roll = (not data.buttons[5]) *-data.axes[3] * 0.349066
-        body_pose_lite.pitch = data.axes[2] * 0.174533
-        body_pose_lite.yaw = data.buttons[5] * data.axes[3] * 0.436332
-        if data.axes[5] < 0:
-            body_pose_lite.z = data.axes[5] * 0.5
+        body_pose_lite.roll = 0.0
+        body_pose_lite.pitch = data.axes[2] * 0.1
+        body_pose_lite.yaw = 0.0
+        body_pose_lite.z = 0.0
 
         self.pose_lite_publisher.publish(body_pose_lite)
 
